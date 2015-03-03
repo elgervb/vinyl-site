@@ -41,9 +41,25 @@ section.features{
 }
 
 
+.second-col{
+  background: #fff;
+  padding-bottom: 150px;
+  padding-left: 3%;
+
+  h3{
+    color: #2C3237;
+    font-weight: 500;
+  }
+}
+
 section.organize{
   background: #e74c3c;
   font-size: 1.2em;
+
+  ul.bullets{
+    font-size: .8em;
+    list-style-image: url('../img/bullet.png');
+  }
   
   .first-col{
     color: #fff;
@@ -60,14 +76,9 @@ section.organize{
   .second-col{
     background: #fff;
     padding-bottom: 150px;
-    padding-left: 3%;
 
     .screens{
       text-align: center;
-
-      img{
-        border: 1px solid #E74C3C;
-      }
     }
   }
 }
@@ -76,15 +87,14 @@ section.track{
   background: #F5F5F5;
   font-size: 1.2em;
 
+  ul.bullets{
+    font-size: .8em;
+    list-style-image: url('../img/bullet-dark.png');
+  }
+
   .first-col{
     font-size: 2.0em;
     padding-left: 10%;
-  }
-
-  .second-col{
-    background: #fff;
-    padding-bottom: 150px;
-    padding-left: 3%;
   }
 }
 
@@ -93,14 +103,13 @@ section.share {
   color: #fff;
   font-size: 1.2em;
 
+  ul.bullets{
+    font-size: .8em;
+    list-style-image: url('../img/bullet-light.png');
+  }
+
   .first-col{
     font-size: 2.0em;
     padding-left: 10%;
-  }
-
-  .second-col{
-    background: #fff;
-    padding-bottom: 150px;
-    padding-left: 3%;
   }
 }

@@ -134,7 +134,8 @@ gulp.task('express-lr', ['express', 'live-reload'], function(){});
 gulp.task('images', function() {
   return gulp.src('src/img/**/*')
     .pipe(plumber())
-    .pipe(cache(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true })))
+    //.pipe(cache(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true })))
+    .pipe(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true }))
     .pipe(gulp.dest('dist/assets/img'));
 });
 
