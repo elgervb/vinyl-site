@@ -1,8 +1,68 @@
+/* Shared components */
+section.organize, section.track, section.share{
 
+  font-size: 1.2em;
+
+  .first-col{
+    font-size: 2.0em;
+    padding-left: 10%;
+  }
+
+  .second-col{
+    background: #fff;
+    padding-bottom: 150px;
+    padding-left: 3%;
+
+    h3{
+      color: #2C3237;
+      font-weight: 500;
+    }
+  }
+
+  ul.bullets{
+    font-size: .8em;
+    list-style-image: url('../img/bullet-dark.png');
+
+    @include tablet{
+      &{
+        font-size: .6em;
+      }
+    }
+    @include small-tablet{
+      &{
+        font-size: .6em;
+      }
+    }
+
+    li{
+      padding-bottom: 4px;
+    }
+  }
+
+}
+
+section.welcome{
+  background: #444;
+  box-shadow: 0 3px 4px rgba(0,0,0,.4);
+  color: #fff;
+  margin-bottom: 150px;
+  padding: 75px 0;
+  
+  .title{
+    font-family: blokletters;
+    font-size: 4em;
+    line-height: 128px;
+    text-align: center;
+
+    img{
+      vertical-align: middle;
+    }
+  } 
+
+}
 
 section.features{
   padding-bottom: 150px;
-  font-size: 1.2em;
 
   .organize, .track, .share{
     text-align: center;
@@ -40,31 +100,15 @@ section.features{
   }
 }
 
-
-.second-col{
-  background: #fff;
-  padding-bottom: 150px;
-  padding-left: 3%;
-
-  h3{
-    color: #2C3237;
-    font-weight: 500;
-  }
-}
-
 section.organize{
   background: #e74c3c;
-  font-size: 1.2em;
 
   ul.bullets{
-    font-size: .8em;
     list-style-image: url('../img/bullet.png');
   }
   
   .first-col{
     color: #fff;
-    font-size: 2.0em;
-    padding-left: 10%;
 
      @include phone{
       &{
@@ -74,8 +118,6 @@ section.organize{
     }
   }
   .second-col{
-    background: #fff;
-    padding-bottom: 150px;
 
     .screens{
       text-align: center;
@@ -85,31 +127,14 @@ section.organize{
 
 section.track{
   background: #F5F5F5;
-  font-size: 1.2em;
-
-  ul.bullets{
-    font-size: .8em;
-    list-style-image: url('../img/bullet-dark.png');
-  }
-
-  .first-col{
-    font-size: 2.0em;
-    padding-left: 10%;
-  }
 }
 
 section.share {
   background: #2C3237;
   color: #fff;
-  font-size: 1.2em;
+
 
   ul.bullets{
-    font-size: .8em;
     list-style-image: url('../img/bullet-light.png');
-  }
-
-  .first-col{
-    font-size: 2.0em;
-    padding-left: 10%;
   }
 }
