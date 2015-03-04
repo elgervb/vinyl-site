@@ -23,12 +23,12 @@ section.organize, section.track, section.share{
     font-size: .8em;
     list-style-image: url('../img/bullet-dark.png');
 
-    @include tablet{
+    @include max-tablet{
       &{
         font-size: .6em;
       }
     }
-    @include small-tablet{
+    @include max-small-tablet{
       &{
         font-size: .6em;
       }
@@ -62,7 +62,12 @@ section.welcome{
 }
 
 section.features{
+  margin: 0 10%;
   padding-bottom: 150px;
+
+  @include max-tablet{
+    margin: 0;
+  }
 
   .organize, .track, .share{
     text-align: center;
@@ -82,7 +87,7 @@ section.features{
     }
   }
 
-  @include phone{
+  @include max-phone{
     .track, .share{
       margin-top: 50px;
     }
@@ -91,12 +96,6 @@ section.features{
   .organize .img{
     background: url(../img/organize.png) no-repeat center center;
     background-size: cover;
-  }
-
-  @include desktop{
-    &{
-      margin: 0 10%;
-    }
   }
 }
 
@@ -110,7 +109,7 @@ section.organize{
   .first-col{
     color: #fff;
 
-     @include phone{
+     @include max-phone{
       &{
         text-align: center;
         padding: 25px 0;
