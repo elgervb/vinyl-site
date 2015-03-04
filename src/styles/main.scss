@@ -15,11 +15,12 @@
 @import 'partials/list';
 
 @import 'partials/columns';
-@import 'partials/navigation';
+//@import 'partials/navigation';
 
 @import 'partials/animations';
 
 /*
  * Modules
  */
+@import 'modules/fonts';
 @import 'modules/main';
