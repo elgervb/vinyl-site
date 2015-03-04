@@ -54,8 +54,29 @@ section.welcome{
     line-height: 128px;
     text-align: center;
 
+    @include max-tablet{
+      font-size: 3.5em;
+    }
+    @include max-small-tablet{
+      font-size: 3em;
+    }
+    @include max-phone{
+      font-size: 2em;
+    }
+
     img{
+      height: 2em;
       vertical-align: middle;
+
+      @include max-tablet{
+        height: 1.75em;
+      }
+      @include max-small-tablet{
+        height: 1.5em;
+      }
+      @include max-phone{
+        height: 1.5em;
+      }
     }
   } 
 
