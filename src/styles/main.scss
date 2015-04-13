@@ -1,6 +1,6 @@
 
+@import 'variables';
 @import 'partials/reset';
-@import 'partials/vars';
 @import 'partials/mixins';
 
 @import 'partials/fonts';
@@ -24,3 +24,5 @@
  */
 @import 'modules/fonts';
 @import 'modules/main';
+
+@import 'modules/music-list';

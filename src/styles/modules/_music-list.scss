@@ -1,0 +1,37 @@
+.music-list{
+
+  li{
+    border-bottom: 1px solid #D3D3D3;
+    cursor: pointer;
+    padding: 10px 0;
+
+    @extend .clearfix;
+  }
+
+  .image-container{
+    float: left;
+    height: 64px;
+    width: 64px;
+
+    img{
+      height: 100%;
+    } 
+  }
+
+  .details{
+    padding: 3px 10px 3px 74px;
+
+    p{
+      padding-bottom: 0;
+    }
+
+    .artist{
+      font-size: 1.4em;
+    }
+
+    .popularity{
+      color: #d3d3d3;
+    }
+  }
+  
+}
