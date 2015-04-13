@@ -1,0 +1,22 @@
+<header>
+  <h1>Search artist</h1>
+</header>
+
+<form class="form">
+  <div class="field">
+    <input type="text" class="full-width" ng-model="artist" placeholder="artist" />
+  </div>
+  <button class="btn-red" ng-click="search()" ng-disabled="!artist">search</button>
+</form>
+
+<ul class="music-list">
+  <li ng-repeat="artist in artists.items" ng-click="redirect(artist)">
+    <div class="image-container">
+      <img ng-src="{{getImageSrc(artist)}}"/>
+    </div>
+    <div class="details">
+      <p class="artist">{{artist.name}}</p>
+      <p class="popularity">Popularity: {{artist.popularity}}
+    </div>
+  </li>
+</ul>

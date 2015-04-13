@@ -1,7 +1,5 @@
 
-console.log('app.js');
-
-var app = angular.module('default', ['ngRoute'])
+var app = angular.module('vinyl', ['ngRoute','ngResource'])
 
 
 // TODO implement it
@@ -10,9 +8,15 @@ var app = angular.module('default', ['ngRoute'])
  
   $routeProvider
   	.when('/', {
-	  controller: 'MainController',
-	  templateUrl: '/assets/js/app/modules/main/main.html'
-	});
+  	  controller: 'MainController',
+  	  templateUrl: '/js/app/modules/main/main.html'
+  	})
+    // start searching for an artist
+    .when('/app/search',{
+      controller: 'ArtistController',
+      templateUrl: '/js/app/modules/app/search/artist.html'
+    });
+
 
   $locationProvider.html5Mode('true');
 
