@@ -1,28 +1,28 @@
 var gulp = require('gulp'),
-    sass = require('gulp-sass'),
-    autoprefixer = require('gulp-autoprefixer'),
-    minifycss = require('gulp-minify-css'),
-    sourcemaps = require('gulp-sourcemaps'),
-    jshint = require('gulp-jshint'),
-    stylish = require('jshint-stylish')
-    uglify = require('gulp-uglify'),
-    imagemin = require('gulp-imagemin'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
-    cache = require('gulp-cache'),
-    livereload = require('gulp-livereload'),
-    express = require('express'),
-    del = require('del'),
-    stripDebug = require('gulp-strip-debug'),
-    browserSync = require('browser-sync'),
     argv = require('yargs').argv,
+    autoprefixer = require('gulp-autoprefixer'),
+    browserSync = require('browser-sync'),
+    cache = require('gulp-cache'),
+    concat = require('gulp-concat'),
+    del = require('del'),
+    express = require('express'),
     gulpif = require('gulp-if'),
-    todo = require('gulp-todo'),
+    imagemin = require('gulp-imagemin'),
     jsdoc = require("gulp-jsdoc"),
-    plumber = require('gulp-plumber'),
+    jshint = require('gulp-jshint'),
+    livereload = require('gulp-livereload'),
+    minifycss = require('gulp-minify-css'),
     ngannotate = require('gulp-ng-annotate'),
-    replace = require('gulp-replace');
+    notify = require('gulp-notify'),
+    plumber = require('gulp-plumber'),
+    rename = require('gulp-rename'),
+    replace = require('gulp-replace'),
+    sass = require('gulp-sass'),
+    stripDebug = require('gulp-strip-debug'),
+    stylish = require('jshint-stylish'),
+    sourcemaps = require('gulp-sourcemaps'),
+    todo = require('gulp-todo'),
+    uglify = require('gulp-uglify');
 
 var options = {liveReload: false};
 
@@ -66,32 +66,37 @@ gulp.task('build', ['clean'], function() {
 /**
  * Cleans the `dist` folder and other generated files
  */
-gulp.task('clean', function(cb) {
+gulp.task('clean', ['clear-cache'],  function(cb) {
     del(['dist', 'docs','todo.md', 'todo.json'], cb);
 });
 
+/**
+ * Clears the cache used by gulp-cache
+ */
+gulp.task('clear-cache', function() {
+
+  // Or, just call this for everything
+  cache.clearAll();
+});
 
 /**
  * Copies all to dist/
  */
 gulp.task('copy', function() {
 
-  // copy all jpg's as they are not handled by the images task
-  gulp.src( 'src/img/**/*.jpg')
-    .pipe(gulp.dest('dist/assets/img'));
-
   // copy all fonts
-  gulp.src( 'src/fonts/**')
-    .pipe(gulp.dest('dist/assets/fonts'));
+  gulp.src( ['src/fonts/opensans/**/**', 'src/fonts/blokletters/**/**'], {base: './src/fonts'})
+    .pipe(gulp.dest('dist/fonts'));
+
 
   // copy all html && json
   gulp.src( ['src/js/app/**/*.html', 'src/js/app/**/*.json'])
-    .pipe(gulp.dest('dist/assets/js/app'));
+    .pipe(cache(gulp.dest('dist/js/app')));
 
   // copy the index.html
    return gulp.src('src/index.html')
     .pipe(gulpif(options.liveReload, replace(/(\<\/body\>)/g, "<script>document.write('<script src=\"http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>$1")))
-    .pipe(gulp.dest('dist/'));
+    .pipe(cache(gulp.dest('dist/')));
 });
 
 
@@ -106,8 +111,8 @@ gulp.task('default', ['build']);
  * Generate docs from all application javascript
  */
 gulp.task('docs', function() {
-  return gulp.src("./src/js/app/**/*.js")
-    .pipe(jsdoc('./docs'))
+  // return gulp.src("./src/js/app/**/*.js")
+  //   .pipe(jsdoc('./docs'))
 });
 
 
@@ -123,20 +128,19 @@ gulp.task('express', function(){
 
 
 /**
- * Task to start a Express server on port 4000 and used the live reload functionality.
+ * Task to start a server on port 4000 and used the live reload functionality.
  * Depends on: express, live-reload
  */
-gulp.task('express-lr', ['express', 'live-reload'], function(){});
+gulp.task('start', ['express', 'live-reload'], function(){});
 
 /**
- * Task to optimize and deploy all images found in folder `src/img/**`. Result is copied to `dist/assets/img`
+ * Task to optimize and deploy all images found in folder `src/img/**`. Result is copied to `dist/img`
  */
 gulp.task('images', function() {
   return gulp.src('src/img/**/*')
-    .pipe(plumber())
-    //.pipe(cache(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true })))
-    .pipe(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true }))
-    .pipe(gulp.dest('dist/assets/img'));
+    .pipe(plumber({errorHandler: onError}))
+    .pipe(cache(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true })))
+    .pipe(gulp.dest('dist/img'));
 });
 
 
@@ -187,34 +191,33 @@ gulp.task('remove',['clean'], function(cb){
  */
 gulp.task('scripts-app', ['docs'], function() {
   return gulp.src('src/js/app/**/*.js')
-    .pipe(plumber())
-    .pipe(sourcemaps.init())
+    .pipe(plumber({errorHandler: onError}))
+    .pipe(ngannotate({gulpWarnings: false}))
     .pipe(jshint())
-    .on('error', notify.onError(function (error) {
-      return error.message;
-     }))
     .pipe(jshint.reporter(stylish))
     .pipe(concat('app.js'))
-    .pipe(gulp.dest('dist/assets/js'))
+    .pipe(gulp.dest('dist/js'))
     .pipe(rename({suffix: '.min'}))
     .pipe(gulpif(!argv.dev, stripDebug()))
-    .pipe(ngannotate())
+    .pipe(sourcemaps.init())
     .pipe(gulpif(!argv.dev, uglify()))
-    .on('error', handleError)
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('dist/assets/js'));
+    .pipe(gulp.dest('dist/js'));
 });
 
 
 /**
- * Task to handle all vendor specific javasript. All vendor javascript will be copied to the dist directory. Also a concatinated version will be made, available in \dist\assets\js\vendor\vendor.js
+ * Task to handle all vendor specific javasript. All vendor javascript will be copied to the dist directory. Also a concatinated version will be made, available in \dist\js\vendor\vendor.js
  */
 gulp.task('scripts-vendor', function() {
     // script must be included in the right order. First include angular, then angular-route
-  return gulp.src(['src/js/vendor/angularjs/1.3.0/angular.min.js','src/js/vendor/angularjs/1.3.0/angular-route.min.js','src/js/vendor/**/*.js'])
-    .pipe(gulp.dest('dist/assets/js/vendor'))
+  return gulp.src([
+      'src/js/vendor/angularjs/**/angular.min.js',
+      'src/js/vendor/angularjs/**/angular-route.min.js', 
+      'src/js/vendor/angularjs/**/*'])
+    .pipe(gulp.dest('dist/js/vendor'))
     .pipe(concat('vendor.js'))
-    .pipe(gulp.dest('dist/assets/js/vendor'));
+    .pipe(gulp.dest('dist/js/vendor'));
 });
 
 
@@ -224,15 +227,13 @@ gulp.task('scripts-vendor', function() {
  */
 gulp.task('styles', function() {
   return gulp.src('src/styles/main.scss')
-    .pipe(plumber())
+    .pipe(plumber({errorHandler: onError}))
     .pipe(sass({ style: 'expanded' }))
-    .on('error', handleError)
     .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .on('error', handleError)
-    .pipe(gulp.dest('dist/assets/css'))
+    .pipe(gulp.dest('dist/css'))
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
-    .pipe(gulp.dest('dist/assets/css'));
+    .pipe(gulp.dest('dist/css'));
 });
 
 
@@ -240,8 +241,8 @@ gulp.task('styles', function() {
  * Output TODO's & FIXME's in markdown and json file as well
  */
 gulp.task('todo', function() {
-    gulp.src('src/js/app/**/*.js')
-      .pipe(plumber())
+    gulp.src(['src/js/app/**/*.js','src/styles/app/**/*.scss'])
+      .pipe(plumber({errorHandler: onError}))
       .pipe(todo())
       .pipe(gulp.dest('./')) //output todo.md as markdown
       .pipe(todo.reporter('json', {fileName: 'todo.json'}))
@@ -270,11 +271,10 @@ gulp.task('watch', function() {
   gulp.watch('src/img/**/*', ['images']);
 });
 
-
-function handleError (error) {
-
-    //If you want details of the error in the console
-    console.log(error.toString());
-
-    this.emit('end');
+function onError(error){
+  // TODO log error with gutil
+  notify.onError(function (error) {
+    return error.message;
+  });
+  this.emit('end');
 }
