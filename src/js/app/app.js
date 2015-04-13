@@ -1,9 +1,6 @@
 
 var app = angular.module('vinyl', ['ngRoute','ngResource'])
 
-
-// TODO implement it
-
 .config(function($routeProvider, $locationProvider) {
  
   $routeProvider
@@ -15,6 +12,10 @@ var app = angular.module('vinyl', ['ngRoute','ngResource'])
     .when('/app/search',{
       controller: 'ArtistController',
       templateUrl: '/js/app/modules/app/search/artist.html'
+    })
+    .when('/app/search/albums/:artistId',{
+      controller: 'AlbumController',
+      templateUrl: '/js/app/modules/app/search/album.html'
     });
 
 

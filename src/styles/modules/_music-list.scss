@@ -6,6 +6,10 @@
     padding: 10px 0;
 
     @extend .clearfix;
+
+    &:hover{
+      background-color: #E8E8E8;
+    }
   }
 
   .image-container{
@@ -25,11 +29,11 @@
       padding-bottom: 0;
     }
 
-    .artist{
+    .primary{
       font-size: 1.4em;
     }
 
-    .popularity{
+    .secundary{
       color: #d3d3d3;
     }
   }
